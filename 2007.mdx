@@ -1,0 +1,54 @@
+https://www.iarcs.org.in/inoi/2007/inoi2007/inoi2007-qpaper.pdf
+
+
+## PROBLEM-2 
+
+```cpp
+#include <bits/stdc++.h>
+#define ll long long
+using namespace std;
+
+ll A[210][210];
+ll P[210][210];
+
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+
+    ll m, n;
+    cin >> m >> n;
+
+    for (ll i=1; i<=m; i++) {
+        for (ll j=1; j<=n; j++) {
+            cin >> A[i][j];
+            if (A[i][j]==0) P[i][j]=1;
+        }
+    }
+
+    // list of zeros
+    for (ll i=1; i<=m; i++) {
+        for (ll j=1; j<=n; j++) {
+            P[i][j] += P[i-1][j]+P[i][j-1]-P[i-1][j-1];
+        }
+    }
+
+    //prefix sum
+    for (ll i=1; i<=m; i++) {
+        for (ll j=1; j<=n; j++) {
+            A[i][j] += A[i-1][j]+A[i][j-1]-A[i-1][j-1];
+        }
+    }
+
+    // sol
+    ll M=0;
+    for (ll i=1; i<=m; i++) {
+        for (ll j=1; j<=n; j++) {
+            if (!P[i][j] && i==j) M=max(M, A[i][j]);
+            if (P[i][j]==P[i][j-i]) M=max(M, A[i][j]-A[i][j-i]);
+        }
+    }
+    cout << M;
+
+    return 0;
+}
+```
