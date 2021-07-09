@@ -1,0 +1,62 @@
+https://www.codechef.com/INOIPRAC/problems/INOI2002
+
+```cpp
+#include <bits/stdc++.h>
+#define ll long long
+using namespace std;
+
+const ll m=1e9+7;
+const ll max_N = 1000010;
+ll t[max_N], h[max_N], g[max_N];
+
+ll add(ll a, ll b){
+    return (a+b)%m;
+}
+
+ll solve2(ll n) {
+    t[0]=1; t[1]=0; t[2]=1;
+    for (ll i=3; i<=n; i++) {
+        t[i]=add(t[i-2], t[i-3]);
+    }
+    return t[n];
+}
+ll solve3(ll n) {
+    t[0]=1, t[1]=1, t[2]=1;
+    h[0]=0, h[1]=0, h[2]=0;
+    g[0]=0, g[1]=0, g[2]=1;
+    for (ll i=3; i<=n; i++) {
+        t[i]=add( add(t[i-1],t[i-3]), add(h[i-2], h[i-2]) );
+        //t[i]=add( add(t[i-1],t[i-3]), add(h[i-3], h[i-3]) );
+        h[i]=add(g[i-2],h[i-3]);
+        //h[i]= add(g[i-1], h[i-3]);
+        g[i]=add(t[i-2],g[i-3]);
+    }
+    return t[n];
+}
+
+
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+
+    ll t;
+    cin >>t;
+
+    while(t--) {
+        ll n, k;
+        cin >> k >> n;
+        if (k==1) {
+            if (n%3) cout << "0";
+            else cout << "1";
+        }
+        if (k==2) {
+            cout<< solve2(n);
+        }
+        if (k==3) {
+            cout << solve3(n);
+        }
+        cout << '\n';
+    }
+    return 0;
+}
+```
