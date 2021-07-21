@@ -1,0 +1,68 @@
+https://www.iarcs.org.in/inoi/2003/inoi2003/qpaper/chamber.php
+
+PROBLEM-1
+https://www.codechef.com/WOINOIDP/problems/INOI0301
+
+```cpp
+#include <bits/stdc++.h>
+#define ll long long
+using namespace std;
+
+const ll maxN=510;
+vector <pair<ll, ll>> adj[maxN][maxN];
+ll A[maxN][maxN];
+ll vis[maxN][maxN];
+
+ll dfs(ll i, ll j) {
+    vis[i][j]=1;
+    ll visct=1;
+    for (auto next: adj[i][j]) {
+        if (!vis[next.first][next.second]) visct += dfs(next.first, next.second);
+    }
+    return visct;
+}
+
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    
+    ll m, n;
+    cin >> m >> n;;
+    
+    for (ll i=1; i<=m; i++) {
+        for (ll j=1; j<=n; j++) {
+            cin >> A[i][j];
+        }
+    }
+    
+    for (ll i=1; i<m; i++) {
+        for (ll j=1; j<n; j++) {
+            // right
+            if (!A[i][j] && !A[i+1][j]) {
+                adj[i][j].push_back({i+1, j});
+                adj[i+1][j].push_back({i, j});
+            }
+            // down
+            if (!A[i][j] && !A[i][j+1]) {
+                adj[i][j].push_back({i, j+1});
+                adj[i][j+1].push_back({i, j});
+            }
+        }
+    }
+    
+    ll M=0, ct=0;
+    for (ll i=1; i<=m; i++) {
+        for (ll j=1; j<=n; j++) {
+            if (!vis[i][j] && !A[i][j]) {
+                ct++;
+                ll x = dfs(i, j);
+                M = max(M, x);
+            }
+        }
+    }
+    
+    cout << ct << '\n' << M;
+    
+    return 0;
+}
+```
