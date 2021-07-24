@@ -1,0 +1,82 @@
+https://www.iarcs.org.in/inoi/2004/inoi2004/inoi2004-qpaper.pdf
+PROBLEM-1 https://www.codechef.com/WOINOIMI/problems/INOI0401
+
+```cpp
+#include <bits/stdc++.h>
+#define ll long long
+using namespace std;
+
+const ll maxN=1010;
+ll A[maxN][maxN];
+vector <pair<ll, ll>> g[maxN][maxN];
+ll vis[maxN][maxN];
+pair<ll, ll> path[maxN][maxN];
+vector <pair<ll ,ll>> v;
+ 
+void dfs(ll i, ll j) {
+	vis[i][j]=1;
+	for (auto x: g[i][j]) {
+		if (!vis[x.first][x.second]) {
+		    path[x.first][x.second]= {i, j};
+		    dfs(x.first, x.second);
+		}
+	}
+}
+
+void findpath(ll i, ll j){
+    if (i==1 && j==1) return;
+    ll x = path[i][j].first;
+    ll y = path[i][j].second;
+    v.push_back({x, y});
+    findpath(x, y);
+}
+
+
+int main(){
+    
+    ll n, m;
+    cin >> m >> n;
+    
+    for (ll i=1; i<=m; i++) {
+        for (ll j=1; j<=n; j++) {
+            cin >> A[i][j];
+        }
+    }
+    
+    //adj list
+    for (ll i=1; i<=m; i++) {
+        for (ll j=1; j<=n; j++) {
+            
+            if (i!=m) { 
+                if ( abs(A[i][j]-A[i+1][j])<=1 ) {
+                    g[i][j].push_back({i+1, j});
+                    g[i+1][j].push_back({i, j});
+                }
+            }
+            
+            if (j!=n) {
+                if ( abs(A[i][j]-A[i][j+1])<=1 ){
+                    g[i][j].push_back({i, j+1});
+                    g[i][j+1].push_back({i, j});
+                }
+            }
+        }
+    } 
+
+
+    //ans
+    dfs(1,1);
+    
+   	if (!vis[m][n]) cout << "0";
+   	else {
+   	    cout << "1\n";
+   	    findpath(m,n);
+   	    for (ll i=v.size()-1; i>=0; i--) {
+   	        cout << v[i].first <<" " <<v[i].second <<'\n';
+   	    }
+   	    cout << m << " " << n << '\n';
+   	}
+
+    return 0;
+}
+```
